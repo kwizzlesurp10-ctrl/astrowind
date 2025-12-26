@@ -21,8 +21,11 @@ const hasExternalScripts = false;
 const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroIntegration)[] = []) =>
   hasExternalScripts ? (Array.isArray(items) ? items.map((item) => item()) : [items()]) : [];
 
+import vercel from '@astrojs/vercel/serverless';
+
 export default defineConfig({
-  output: 'static',
+  output: 'server',
+  adapter: vercel(),
 
   integrations: [
     tailwind({

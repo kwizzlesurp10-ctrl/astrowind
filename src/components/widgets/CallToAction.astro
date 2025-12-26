@@ -56,3 +56,22 @@ const {
     }
   </div>
 </WidgetWrapper>
+
+<script>
+  // Invader Zim Self Destruct / Surrender Logic
+  const buttons = document.querySelectorAll('.btn-primary');
+
+  buttons.forEach((button) => {
+    if (button.textContent?.includes('Surrender')) {
+      button.addEventListener('click', (e) => {
+        if (!confirm('WARNING: SELF DESTRUCT SEQUENCE INITIATED! ARE YOU SURE YOU WANT TO SURRENDER?')) {
+          e.preventDefault();
+          alert('GOOD! DOOM AWAITS!');
+        } else {
+          // Let it proceed, but maybe alert again
+          alert('UNLEASHING THE DOOM!');
+        }
+      });
+    }
+  });
+</script>

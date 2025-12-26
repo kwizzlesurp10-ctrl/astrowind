@@ -1,0 +1,43 @@
+---
+import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
+
+const { id, isDark = false, classes = {}, bg = await Astro.slots.render('bg') } = Astro.props;
+---
+
+<div class="fixed bottom-0 left-0 w-full z-50 bg-black border-t-4 border-[var(--aw-color-primary)] p-2">
+  <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+    <!-- Album Art / Icon -->
+    <div class="hidden sm:flex items-center justify-center w-12 h-12 bg-[var(--aw-color-secondary)] rounded-full animate-[spin_5s_linear_infinite]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[var(--aw-color-primary)]" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+            <path d="M12 2l0 2"></path>
+            <path d="M12 20l0 2"></path>
+            <path d="M20 12l2 0"></path>
+            <path d="M2 12l2 0"></path>
+         </svg>
+    </div>
+
+    <!-- Song Info & Controls -->
+    <div class="flex-1 flex flex-col items-center">
+        <div class="text-[var(--aw-color-primary)] font-bold font-heading text-sm mb-1 tracking-widest uppercase">
+            Now Playing: The Doom Song
+        </div>
+        <audio controls class="w-full h-8 block" />
+    </div>
+
+    <!-- Extra Zim Text -->
+    <div class="hidden md:block text-[var(--aw-color-accent)] text-xs font-mono font-bold">
+        VOLUME: MAX<br>
+        DOOM: IMMINENT
+    </div>
+  </div>
+</div>
+
+<style>
+  audio {
+    filter: invert(1) hue-rotate(180deg); /* Make native player look alien */
+    border-radius: 9999px;
+  }
+</style>
