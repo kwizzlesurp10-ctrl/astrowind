@@ -2,19 +2,35 @@
 import type { Form as Props } from '~/types';
 import Button from '~/components/ui/Button.astro';
 
-const { inputs, textarea, disclaimer, button = 'Contact us', description = '' } = Astro.props;
+const {
+  inputs,
+  textarea,
+  disclaimer,
+  button = 'Contact us',
+  description = '',
+  action = '#',
+  method = 'post',
+} = Astro.props;
+
+const textareaId = textarea?.name ?? 'message';
 ---
 
-<form>
+<form action={action} method={method} novalidate aria-label="Contact form">
   {
     inputs &&
       inputs.map(
-        ({ type = 'text', name, label = '', autocomplete = 'on', placeholder = '' }) =>
+        ({ type = 'text', name, label = '', autocomplete = 'on', placeholder = '', required = false }) =>
           name && (
             <div class="mb-6">
               {label && (
                 <label for={name} class="block text-sm font-medium">
                   {label}
+                  {required && (
+                    <span class="text-red-500" aria-hidden="true">
+                      {' '}
+                      *
+                    </span>
+                  )}
                 </label>
               )}
               <input
@@ -23,6 +39,8 @@ const { inputs, textarea, disclaimer, button = 'Contact us', description = '' } 
                 id={name}
                 autocomplete={autocomplete}
                 placeholder={placeholder}
+                required={required}
+                aria-required={required}
                 class="py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
               />
             </div>
@@ -32,15 +50,18 @@ const { inputs, textarea, disclaimer, button = 'Contact us', description = '' } 
 
   {
     textarea && (
-      <div>
-        <label for="textarea" class="block text-sm font-medium">
-          {textarea.label}
-        </label>
+      <div class="mb-6">
+        {textarea.label && (
+          <label for={textareaId} class="block text-sm font-medium">
+            {textarea.label}
+          </label>
+        )}
         <textarea
-          id="textarea"
-          name={textarea.name ? textarea.name : 'message'}
-          rows={textarea.rows ? textarea.rows : 4}
+          id={textareaId}
+          name={textarea.name ?? 'message'}
+          rows={textarea.rows ?? 4}
           placeholder={textarea.placeholder}
+          aria-label={textarea.label ?? 'Message'}
           class="py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
         />
       </div>
@@ -55,10 +76,13 @@ const { inputs, textarea, disclaimer, button = 'Contact us', description = '' } 
             id="disclaimer"
             name="disclaimer"
             type="checkbox"
+            required={disclaimer.required ?? false}
+            aria-required={disclaimer.required ?? false}
+            aria-describedby="disclaimer-label"
             class="cursor-pointer mt-1 py-3 px-4 block w-full text-md rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900"
           />
         </div>
-        <div class="ml-3">
+        <div class="ml-3" id="disclaimer-label">
           <label for="disclaimer" class="cursor-pointer select-none text-sm text-gray-600 dark:text-gray-400">
             {disclaimer.label}
           </label>

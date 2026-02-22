@@ -167,6 +167,7 @@ export interface Input {
   label?: string;
   autocomplete?: string;
   placeholder?: string;
+  required?: boolean;
 }
 
 export interface Textarea {
@@ -178,6 +179,7 @@ export interface Textarea {
 
 export interface Disclaimer {
   label?: string;
+  required?: boolean;
 }
 
 // COMPONENTS
@@ -210,6 +212,8 @@ export interface Form {
   disclaimer?: Disclaimer;
   button?: string;
   description?: string;
+  action?: string;
+  method?: 'get' | 'post';
 }
 
 // WIDGETS
