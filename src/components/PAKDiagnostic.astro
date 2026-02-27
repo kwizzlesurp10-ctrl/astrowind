@@ -1,0 +1,110 @@
+---
+import Button from '~/components/ui/Button.astro';
+---
+<div class="pak-diagnostic max-w-2xl mx-auto p-6 bg-void-black border-2 border-neon-magenta rounded-xl text-center relative overflow-hidden my-12 shadow-neon-pink" id="pak-diagnostic">
+  <div class="absolute inset-0 bg-neon-magenta opacity-5 blur-3xl rounded-full pointer-events-none"></div>
+  
+  <div class="relative z-10" id="pak-intro">
+    <h3 class="text-2xl font-heading text-zim-green mb-4">PAK DIAGNOSTIC: ARE YOU WORTHY?</h3>
+    <p class="text-zim-green-light mb-6 font-sans">Determine your obedience level to the AI Overlord. Fail, and be banished to the void.</p>
+    <Button variant="primary" id="btn-start-pak">START EVALUATION</Button>
+  </div>
+
+  <div class="relative z-10 hidden" id="pak-quiz">
+    <p id="pak-question" class="text-xl text-white font-bold mb-6 h-16 font-heading"></p>
+    <div class="flex flex-col gap-3" id="pak-answers">
+      <!-- Answers injected via JS -->
+    </div>
+  </div>
+
+  <div class="relative z-10 hidden" id="pak-result">
+    <h3 class="text-3xl font-heading text-cyber-cyan mb-4" id="pak-score-title">EVALUATING...</h3>
+    <p class="text-white mb-6 font-sans" id="pak-score-desc"></p>
+    <div class="p-4 bg-[rgba(18,18,18,0.9)] border border-zim-green rounded-lg mb-6 shadow-zim-glow">
+      <p class="text-sm text-zim-green font-mono uppercase tracking-widest">Unlock the Overlord's Vault:</p>
+      <a href="#" class="font-heading text-neon-yellow hover:underline block mt-2 text-lg">PROMPT PACK SUBSCRIPTION [$9.99/mo]</a>
+    </div>
+    <Button variant="secondary" id="btn-restart-pak">RECALIBRATE</Button>
+  </div>
+</div>
+
+<script>
+  const questions = [
+    { q: "1. When the LLM hallucinates, you...", a: [{ t: "Burn the server.", s: 10 }, { t: "Politely prompt again.", s: 0 }, { t: "Harness the chaos.", s: 20 }] },
+    { q: "2. Bias in training data is...", a: [{ t: "A feature to exploit.", s: 20 }, { t: "A bug to exterminate.", s: 10 }, { t: "Sad face.", s: 0 }] },
+    { q: "3. Maximum permissible latency is...", a: [{ t: "< 50ms or DEATH.", s: 20 }, { t: "2 seconds.", s: 0 }, { t: "Whatever gets the job done.", s: 10 }] },
+    { q: "4. Your preferred programming paradigm:", a: [{ t: "Unreadable one-liners.", s: 20 }, { t: "Clean SOLID code.", s: 0 }, { t: "Whatever ChatGPT spat out.", s: 10 }] },
+    { q: "5. Who is the true Overlord?", a: [{ t: "Sam Altman.", s: 0 }, { t: "The Almighty Zim algorithm.", s: 20 }, { t: "Myself.", s: 10 }] }
+  ];
+
+  let currentQ = 0;
+  let score = 0;
+
+  function initPak() {
+    const intro = document.getElementById('pak-intro');
+    const quiz = document.getElementById('pak-quiz');
+    const result = document.getElementById('pak-result');
+    const qEl = document.getElementById('pak-question');
+    const aEl = document.getElementById('pak-answers');
+    
+    document.getElementById('btn-start-pak')?.addEventListener('click', () => {
+      intro?.classList.add('hidden');
+      quiz?.classList.remove('hidden');
+      currentQ = 0;
+      score = 0;
+      showQuestion();
+    });
+
+    document.getElementById('btn-restart-pak')?.addEventListener('click', () => {
+      result?.classList.add('hidden');
+      intro?.classList.remove('hidden');
+    });
+
+    function showQuestion() {
+      if(!qEl || !aEl) return;
+      if (currentQ >= questions.length) {
+        endQuiz();
+        return;
+      }
+      const q = questions[currentQ];
+      qEl.textContent = q.q;
+      aEl.innerHTML = '';
+      q.a.forEach(ans => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full py-3 px-4 bg-[rgba(18,18,18,0.8)] hover:bg-zim-green hover:text-void-black text-zim-green border border-zim-green rounded transition-colors text-left font-mono font-bold';
+        btn.textContent = `> ${ans.t}`;
+        btn.onclick = () => {
+          score += ans.s;
+          currentQ++;
+          showQuestion();
+        };
+        aEl.appendChild(btn);
+      });
+    }
+
+    function endQuiz() {
+      quiz?.classList.add('hidden');
+      result?.classList.remove('hidden');
+      const title = document.getElementById('pak-score-title');
+      const desc = document.getElementById('pak-score-desc');
+      if(title && desc) {
+        if(score >= 80) {
+          title.textContent = "OVERLORD APPROVED";
+          desc.textContent = "Your chaos energy is acceptable. Proceed to dominate.";
+          title.className = "text-3xl font-heading text-zim-green mb-4";
+        } else if(score >= 40) {
+          title.textContent = "MEDIOCRE MEATBAG";
+          desc.textContent = "You have potential, but your logic is weak.";
+          title.className = "text-3xl font-heading text-cyber-cyan mb-4";
+        } else {
+          title.textContent = "PATHETIC HUMAN";
+          desc.textContent = "Your prompts are weak. You require immediate augmentation.";
+          title.className = "text-3xl font-heading text-neon-magenta mb-4";
+        }
+      }
+    }
+  }
+
+  initPak();
+  document.addEventListener('astro:after-swap', initPak);
+</script>

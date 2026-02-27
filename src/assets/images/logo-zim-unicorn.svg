@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100" viewBox="0 0 300 100">
+  <!-- PAK Base -->
+  <circle cx="50" cy="50" r="30" fill="#ea00d9" stroke="#26f4de" stroke-width="4" />
+  <circle cx="50" cy="50" r="20" fill="#711c91" />
+  <circle cx="45" cy="45" r="5" fill="#ff10f0" />
+  <!-- Unicorn Horn -->
+  <path d="M50 20 L40 -30 L60 -30 Z" fill="url(#sparkleGradient)" transform="rotate(30, 50, 20)" />
+  <!-- Antennae -->
+  <line x1="30" y1="25" x2="10" y2="5" stroke="#8add42" stroke-width="3" />
+  <line x1="70" y1="25" x2="90" y2="5" stroke="#8add42" stroke-width="3" />
+  <circle cx="10" cy="5" r="4" fill="#ff10f0" />
+  <circle cx="90" cy="5" r="4" fill="#ff10f0" />
+  <defs>
+    <linearGradient id="sparkleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#26f4de" />
+      <stop offset="50%" stop-color="#ffff0f" />
+      <stop offset="100%" stop-color="#ff10f0" />
+    </linearGradient>
+  </defs>
+  <text x="100" y="60" font-family="'Bungee', sans-serif" font-size="28" fill="#8add42" filter="url(#glow)">ZIM AI</text>
+  <text x="210" y="60" font-family="'Inter', sans-serif" font-size="20" fill="#26f4de" filter="url(#glow)">FRONTIER</text>
+  <filter id="glow">
+    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+    <feMerge>
+      <feMergeNode in="coloredBlur"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</svg>

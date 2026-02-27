@@ -1,0 +1,28 @@
+---
+---
+<div class="flex items-center gap-2">
+  <label for="chaos-select" class="sr-only">Select Chaos Level</label>
+  <span class="text-xs uppercase font-bold text-cyber-cyan tracking-wider hidden sm:inline" aria-hidden="true">Chaos:</span>
+  <select id="chaos-select" class="bg-void-black border border-cyber-cyan text-cyber-cyan text-sm rounded-md focus:ring-neon-magenta focus:border-neon-magenta p-1 cursor-pointer">
+    <option value="mild">Mild</option>
+    <option value="normal" selected>Normal</option>
+    <option value="overlord">Overlord</option>
+  </select>
+</div>
+
+<script>
+  function updateChaos() {
+    const select = document.getElementById('chaos-select') as HTMLSelectElement;
+    if(select) {
+      const saved = localStorage.getItem('chaosLevel') || 'normal';
+      select.value = saved;
+      select.addEventListener('change', (e) => {
+        const level = (e.target as HTMLSelectElement).value;
+        localStorage.setItem('chaosLevel', level);
+        document.documentElement.setAttribute('data-chaos-level', level);
+      });
+    }
+  }
+  updateChaos();
+  document.addEventListener('astro:after-swap', updateChaos);
+</script>

@@ -1,63 +1,135 @@
 ---
 import '@fontsource-variable/inter';
-
-// 'DM Sans'
-// Nunito
-// Dosis
-// Outfit
-// Roboto
-// Literata
-// 'IBM Plex Sans'
-// Karla
-// Poppins
-// 'Fira Sans'
-// 'Libre Franklin'
-// Inconsolata
-// Raleway
-// Oswald
-// 'Space Grotesk'
-// Urbanist
+import '@fontsource/bungee';
+import '@fontsource/rubik-distressed';
 ---
-
-<style is:inline>
+<style is:global>
   :root {
-    --aw-font-sans: 'Inter Variable';
-    --aw-font-serif: 'Inter Variable';
-    --aw-font-heading: 'Inter Variable';
+    --aw-font-sans: 'Inter Variable', sans-serif;
+    --aw-font-serif: 'Inter Variable', sans-serif;
+    --aw-font-heading: 'Bungee', Impact, sans-serif;
 
-    --aw-color-primary: rgb(1 97 239);
-    --aw-color-secondary: rgb(1 84 207);
-    --aw-color-accent: rgb(109 40 217);
+    --aw-color-primary: #8add42;
+    --aw-color-accent: #ff10f0;
+    --aw-color-secondary: #26f4de;
+    --aw-color-text-page: #ffffff;
+    --aw-color-text-default: #bbff81;
+    --aw-color-text-muted: #789d4a;
+    --aw-color-bg-page: #121212;
+  }
 
-    --aw-color-text-heading: rgb(0 0 0);
-    --aw-color-text-default: rgb(16 16 16);
-    --aw-color-text-muted: rgb(16 16 16 / 66%);
-    --aw-color-bg-page: rgb(255 255 255);
+  html {
+    background-color: #121212;
+    color: #ffffff;
+  }
 
-    --aw-color-bg-page-dark: rgb(3 6 32);
-
-    ::selection {
-      background-color: lavender;
+  /* Accessibility: prefers-color-scheme is always dark but soft voids */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --aw-color-bg-page: #121212;
     }
   }
 
+  /* Mild Chaos */
+  html[data-chaos-level="mild"] {
+    --aw-font-heading: 'Inter Variable', sans-serif;
+    cursor: auto !important;
+  }
+  html[data-chaos-level="mild"] .glitch-text {
+    animation: none;
+    text-shadow: none;
+  }
+  html[data-chaos-level="mild"] .animate-sparkle, html[data-chaos-level="mild"] .animate-glitch {
+    animation: none;
+  }
+  html[data-chaos-level="mild"] body::before {
+    display: none;
+  }
+
+  /* Normal Chaos */
+  html[data-chaos-level="normal"] {
+    --aw-font-heading: 'Bungee', Impact, sans-serif;
+    cursor: auto !important;
+  }
+  html[data-chaos-level="normal"] body::before {
+    display: none;
+  }
+
+  /* Overlord Chaos */
+  html[data-chaos-level="overlord"] {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" fill="%23ff10f0" opacity="0.7"/></svg>'), auto;
+  }
+  html[data-chaos-level="overlord"] body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(transparent 0px, transparent 2px, rgba(255,16,240,0.03) 2px, rgba(255,16,240,0.03) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
   .dark {
-    --aw-font-sans: 'Inter Variable';
-    --aw-font-serif: 'Inter Variable';
-    --aw-font-heading: 'Inter Variable';
-
-    --aw-color-primary: rgb(1 97 239);
-    --aw-color-secondary: rgb(1 84 207);
-    --aw-color-accent: rgb(109 40 217);
-
-    --aw-color-text-heading: rgb(247, 248, 248);
-    --aw-color-text-default: rgb(229 236 246);
-    --aw-color-text-muted: rgb(229 236 246 / 66%);
-    --aw-color-bg-page: rgb(3 6 32);
-
+    --aw-color-text-heading: #ffffff;
+    --aw-color-text-default: #bbff81;
+    --aw-color-text-muted: #789d4a;
     ::selection {
-      background-color: black;
-      color: snow;
+      background-color: #ff10f0;
+      color: #121212;
+    }
+  }
+
+  /* Glassmorphism Accessibility & Performance */
+  .glass-card {
+    background-color: rgba(18, 18, 18, 0.85); /* fallback */
+    border: 1px solid rgba(255, 16, 240, 0.3);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 0 10px rgba(255, 16, 240, 0.3);
+    will-change: transform;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  @media (hover: hover) and (min-width: 1024px) {
+    .glass-card {
+      backdrop-filter: blur(10px);
+    }
+    .glass-card:hover {
+      box-shadow: 0 0 15px rgba(38, 244, 222, 0.6);
+      transform: translateY(-2px);
+    }
+  }
+
+  .neon-glow {
+    text-shadow: 0 0 8px rgba(255, 16, 240, 0.8);
+  }
+
+  .glitch-text {
+    animation: glitch 2s infinite;
+    text-shadow: 2px 0 #ff10f0, -2px 0 #26f4de;
+    will-change: transform;
+  }
+
+  /* Accessibility Defaults */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .glitch-text {
+      animation: none !important;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    :root {
+      --aw-color-primary: #4aff28; /* Higher contrast lime */
+      --aw-color-text-muted: #ffffff;
+    }
+    .glass-card {
+      background-color: #000000;
+      border: 2px solid #ffffff;
     }
   }
 </style>

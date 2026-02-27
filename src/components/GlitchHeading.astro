@@ -1,0 +1,18 @@
+---
+export interface Props {
+  text: string;
+  level?: 'low' | 'med' | 'high';
+  as?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+
+const { text, level = 'med', as: Tag = 'h2', class: className = '' } = Astro.props;
+
+let glitchClass = '';
+if (level === 'high') glitchClass = 'glitch-text neon-glow';
+else if (level === 'med') glitchClass = 'glitch-text';
+else glitchClass = 'neon-glow'; // low
+---
+<Tag class={`font-heading font-bold text-white tracking-widest ${glitchClass} ${className}`}>
+  {text}
+</Tag>

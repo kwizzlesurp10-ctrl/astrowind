@@ -1,0 +1,20 @@
+---
+export interface Props {
+  title: string;
+  glowColor?: 'pink' | 'cyan' | 'green';
+  class?: string;
+}
+
+const { title, glowColor = 'pink', class: className = '' } = Astro.props;
+const shadowClasses = {
+  pink: 'shadow-neon-pink hover:shadow-neon-pink',
+  cyan: 'shadow-neon-cyan hover:shadow-neon-cyan',
+  green: 'shadow-zim-glow hover:shadow-zim-glow'
+};
+---
+<div class={`glass-card ${shadowClasses[glowColor]} ${className}`}>
+  <h3 class="text-xl font-heading mb-3 text-white">{title}</h3>
+  <div class="text-zim-green-light">
+    <slot />
+  </div>
+</div>
