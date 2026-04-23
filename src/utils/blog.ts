@@ -262,12 +262,6 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
 
   postsWithScores.sort((a, b) => b.score - a.score);
 
-  const selectedPosts: Post[] = [];
-  let i = 0;
-  while (selectedPosts.length < maxResults && i < postsWithScores.length) {
-    selectedPosts.push(postsWithScores[i].post);
-    i++;
-  }
-
-  return selectedPosts;
+  const related = postsWithScores.filter((p) => p.score > 0);
+  return related.slice(0, maxResults).map((p) => p.post);
 }
