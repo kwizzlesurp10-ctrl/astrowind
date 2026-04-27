@@ -142,13 +142,9 @@ export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<Post
   if (!Array.isArray(slugs)) return [];
 
   const posts = await fetchPosts();
+  const postBySlug = new Map(posts.map((post) => [post.slug, post]));
 
-  return slugs.reduce(function (r: Array<Post>, slug: string) {
-    posts.some(function (post: Post) {
-      return slug === post.slug && r.push(post);
-    });
-    return r;
-  }, []);
+  return slugs.map((slug) => postBySlug.get(slug)).filter((post): post is Post => post !== undefined);
 };
 
 /** */
@@ -156,13 +152,9 @@ export const findPostsByIds = async (ids: Array<string>): Promise<Array<Post>> =
   if (!Array.isArray(ids)) return [];
 
   const posts = await fetchPosts();
+  const postById = new Map(posts.map((post) => [post.id, post]));
 
-  return ids.reduce(function (r: Array<Post>, id: string) {
-    posts.some(function (post: Post) {
-      return id === post.id && r.push(post);
-    });
-    return r;
-  }, []);
+  return ids.map((id) => postById.get(id)).filter((post): post is Post => post !== undefined);
 };
 
 /** */
@@ -270,12 +262,6 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
 
   postsWithScores.sort((a, b) => b.score - a.score);
 
-  const selectedPosts: Post[] = [];
-  let i = 0;
-  while (selectedPosts.length < maxResults && i < postsWithScores.length) {
-    selectedPosts.push(postsWithScores[i].post);
-    i++;
-  }
-
-  return selectedPosts;
+  const related = postsWithScores.filter((p) => p.score > 0);
+  return related.slice(0, maxResults).map((p) => p.post);
 }

@@ -36,7 +36,6 @@ export type ImagesOptimizer = (
 
 /* ******* */
 const config = {
-  // FIXME: Use this when image.width is minor than deviceSizes
   imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 
   deviceSizes: [
@@ -326,6 +325,19 @@ export async function getImagesOptimized(
 
   let breakpoints = getBreakpoints({ width: width, breakpoints: widths, layout: layout });
   breakpoints = [...new Set(breakpoints)].sort((a, b) => a - b);
+
+  if (typeof image !== 'string' && typeof image.width === 'number' && image.width > 0) {
+    const maxW = image.width;
+    breakpoints = breakpoints.filter((w) => w <= maxW);
+    if (breakpoints.length === 0) {
+      breakpoints = [maxW];
+    } else {
+      const largest = breakpoints[breakpoints.length - 1];
+      if (largest < maxW) {
+        breakpoints = [...breakpoints, maxW].sort((a, b) => a - b);
+      }
+    }
+  }
 
   const srcset = (await transform(image, breakpoints, Number(width) || undefined, Number(height) || undefined, format))
     .map(({ src, width }) => `${src} ${width}w`)

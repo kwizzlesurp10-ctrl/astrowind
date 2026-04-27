@@ -1,5 +1,5 @@
 import merge from 'lodash.merge';
-
+import { configSchema } from './configSchema';
 import type { MetaData } from '~/types';
 
 export type Config = {
@@ -193,7 +193,16 @@ const getAnalytics = (config: Config) => {
   return merge({}, _default, config?.analytics ?? {}) as AnalyticsConfig;
 };
 
-export default (config: Config) => ({
+export default (rawConfig: unknown): ReturnType<typeof buildFromConfig> => {
+  const parseResult = configSchema.safeParse(rawConfig);
+  const config = parseResult.success ? parseResult.data : (rawConfig as Config);
+  if (!parseResult.success) {
+    console.warn('[astrowind] Config validation warnings:', parseResult.error.flatten());
+  }
+  return buildFromConfig(config as Config);
+};
+
+const buildFromConfig = (config: Config) => ({
   SITE: getSite(config),
   I18N: getI18N(config),
   METADATA: getMetadata(config),
